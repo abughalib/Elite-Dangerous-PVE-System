@@ -30,7 +30,7 @@
     <li>While installing add Python to your path, it would ask you during installation, probably at the beginning</li>
     <li>Open Powershell or Command Prompt and copy & paste following
       
-      python -m pip install bs4 pandas
+    python -m pip install bs4 pandas
 </li>
   </ul>
 </div>
@@ -42,8 +42,8 @@
       while right mouse or touchpad click (Windows 10) or Simple right click on Windows 11.</li>
     <li>Click on "Open Powershell window here" in windows 10 or "Open in Windows Terminal" in Windows 11.</li>
     <li>Run
-      
-      python main.py #arguments here
+
+    python main.py #arguments here
   </li>
     <li>Example to search a system with following arguments.<br>
       * Least No of Federation Faction (--fed) = 2 <br>
@@ -54,7 +54,7 @@
       * Distance in Light Years from Reference System (--dist) = 100<br>
       * Resource Extraction Site = "Hazardous Site" insort "haz" <br>
         
-      python manage.py --fed 2 --imp 1 --all 1 --ind 1 --ref "Sol" --res "haz" --dist 100
+    python manage.py --fed 2 --imp 1 --all 1 --ind 1 --ref "Sol" --res "haz" --dist 100
   </li>
     <li>Note: if any of of faction is omitted would be considered greater then 0<br>
       Reference system: "Sol"<br>
