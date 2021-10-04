@@ -36,7 +36,7 @@
 </div>
 
 <div>
-  <h3>Process to find system</h3>
+  <h3>Process to find Systems</h3>
   <ul>
     <li>Download as zip or Clone this project, extract it, open this folder, press and hold shift key 
       while right mouse or touchpad click (Windows 10) or Simple right click on Windows 11.</li>
@@ -63,6 +63,8 @@
         **Order of these arguments does not matter.**
     </li>
   </ul>
+
+  <h5>Final Result would be stored in a HTML file name as Filtered_List.html</h5>
 </div>
 
 </body>
