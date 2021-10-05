@@ -54,7 +54,7 @@
       * Distance in Light Years from Reference System (--dist) = 100<br>
       * Resource Extraction Site = "Hazardous Site" insort "haz" <br>
         
-    python manage.py --fed 2 --imp 1 --all 1 --ind 1 --ref "Sol" --res "haz" --dist 100
+    python main.py --fed 2 --imp 1 --all 1 --ind 1 --ref "Sol" --res "haz" --dist 100
   </li>
     <li>Note: if any of of faction is omitted would be considered greater then 0<br>
       Reference system: "Sol"<br>
