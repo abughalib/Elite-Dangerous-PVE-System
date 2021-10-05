@@ -3,16 +3,41 @@ import urllib3
 import pandas as pd
 import re
 import csv
+import vars
+import copy
 
 http = urllib3.PoolManager()
 
 # Get System Data
 
-ref_system = "Balmus"
-ref_system_distance = 100
+args = vars.all_args.parse_args()
+
+ref_system = args.ref
+ref_system_distance = args.dist
 source_per_target = 1
 
-print("Getting System List from edtools.cc")
+sites = {
+    "any": "Any site i.e rings, CNB, low, reg, high, haz",
+    "ring": "Ring Site",
+    "CNB": "Compressed Nav Beacon",
+    "low": "Resource Extraction Site [Low]",
+    "reg": "Resource Extraction Site [Medium]",
+    "high": "Resource Extraction Site [High]",
+    "haz": "Resource Extraction Site [Hazardous]"
+}
+
+print("Getting System List from edtools.cc for: ")
+print(
+    f'''
+    Reference System: {ref_system}\n
+    Distance From Reference System: {ref_system_distance}\n
+    Type of Bounty Hunting Site: {sites[args.res]}
+    Minimum No of Federation Faction: {args.fed}\n
+    Minimum No of Imperial Faction: {args.imp}\n
+    Minimum No of Alliance Faction: {args.all}\n
+    Minimum No of Independent Faction: {args.ind}\n
+    '''
+)
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
@@ -40,26 +65,31 @@ print(f"Total System Found: {len(df)}")
 
 df.fillna(0, inplace=True)
 
-fed_factions = 0
-imp_factions = 0
-all_factions = 0
-ind_factions = 0
+fed_factions = int(args.fed)
+imp_factions = int(args.imp)
+all_factions = int(args.all)
+ind_factions = int(args.ind)
 
-res_site = "haz"
+res_site = args.res
 
 print("Applying Filter...")
 
-filtered_result = df.query(
+filtered_result = copy.deepcopy(df.query(
     f'Fed >= {fed_factions} & Imp >= {imp_factions} & All >= {all_factions} & Ind >= {ind_factions}'
-)
+))
+
+# filtered_result = df[(df["Fed"] >= fed_factions) &
+#                      (df["Imp"] >= imp_factions) &
+#                      (df["All"] >= all_factions) &
+#                      (df["Ind"] >= ind_factions)]
 
 index_to_delete = []
 
 if res_site != "any":
-    for (x, result) in enumerate(filtered_result["RES/rings"]):
-        site = re.search(f"{res_site}", result)
+    for (x, result) in enumerate(zip(filtered_result.index, filtered_result["RES/rings"])):
+        site = re.search(f"{res_site}", result[1])
         if site is None:
-            index_to_delete.append(x)
+            index_to_delete.append(result[0])
 
 filtered_result.drop(index=index_to_delete, inplace=True)
 
@@ -74,11 +104,9 @@ index_to_delete = []
 
 for (index, system) in enumerate(zip(filtered_result.index, filtered_result["Source System"])):
 
-    print(f"Checking for conflict in: {system[1]}...", end='')
+    print(f"Checking for conflict in: {system[1]} ", end='')
 
     system_name = '+'.join(map(str, system[1].split()))
-
-    # Cross checking system state from Inara.cz.
 
     resp_inara = http.request("GET", f"https://inara.cz/starsystem/?search={system_name}", headers=headers)
     inara_page = resp_inara.data.decode('utf-8')
@@ -97,7 +125,7 @@ for (index, system) in enumerate(zip(filtered_result.index, filtered_result["Sou
 
         if previous_influence == inf:
             index_to_delete.append(system[0])
-            print("Conflict Detected...")
+            print("Conflict Detected.", end='')
             break
         else:
             previous_influence = inf
