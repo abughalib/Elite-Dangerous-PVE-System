@@ -63,7 +63,7 @@
     </li>
   </ul>
 
-  <h5>Final Result would be stored in a HTML file name as Filtered_List.html</h5>
+  <h5>Final Result would be stored in an HTML file name as Final_Result.html</h5>
 </div>
 
 </body>
