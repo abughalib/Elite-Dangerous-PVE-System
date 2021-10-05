@@ -29,13 +29,13 @@ sites = {
 print("Getting System List from edtools.cc for: ")
 print(
     f'''
-    Reference System: {ref_system}\n
-    Distance From Reference System: {ref_system_distance}\n
+    Reference System: {ref_system}
+    Distance From Reference System: {ref_system_distance}
     Type of Bounty Hunting Site: {sites[args.res]}
-    Minimum No of Federation Faction: {args.fed}\n
-    Minimum No of Imperial Faction: {args.imp}\n
-    Minimum No of Alliance Faction: {args.all}\n
-    Minimum No of Independent Faction: {args.ind}\n
+    Minimum No of Federation Faction: {args.fed}
+    Minimum No of Imperial Faction: {args.imp}
+    Minimum No of Alliance Faction: {args.all}
+    Minimum No of Independent Faction: {args.ind}
     '''
 )
 
