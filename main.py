@@ -43,7 +43,8 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
 }
 resp = http.request("GET",
-                    f"https://edtools.cc/pve?s={ref_system}&md={ref_system_distance}&sc=", headers=headers)
+                    f"https://edtools.cc/pve?s={'+'.join(map(str, ref_system.split()))}&md={ref_system_distance}&sc=",
+                    headers=headers)
 
 page = resp.data.decode('utf-8')
 
@@ -78,11 +79,6 @@ filtered_result = copy.deepcopy(df.query(
     f'Fed >= {fed_factions} & Imp >= {imp_factions} & All >= {all_factions} & Ind >= {ind_factions}'
 ))
 
-# filtered_result = df[(df["Fed"] >= fed_factions) &
-#                      (df["Imp"] >= imp_factions) &
-#                      (df["All"] >= all_factions) &
-#                      (df["Ind"] >= ind_factions)]
-
 index_to_delete = []
 
 if res_site != "any":
@@ -104,7 +100,7 @@ index_to_delete = []
 
 for (index, system) in enumerate(zip(filtered_result.index, filtered_result["Source System"])):
 
-    print(f"Checking for conflict in: {system[1]} ", end='')
+    print(f'Checking for conflict in: "{system[1]} " ', end='')
 
     system_name = '+'.join(map(str, system[1].split()))
 
