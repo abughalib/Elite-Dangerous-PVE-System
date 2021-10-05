@@ -42,6 +42,7 @@ print(
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
 }
+ref_system = '%2B'.join(map(str, ref_system.split("+")))
 resp = http.request("GET",
                     f"https://edtools.cc/pve?s={'+'.join(map(str, ref_system.split()))}&md={ref_system_distance}&sc=",
                     headers=headers)
@@ -102,7 +103,7 @@ for (index, system) in enumerate(zip(filtered_result.index, filtered_result["Sou
 
     print(f'Checking for conflict in: "{system[1]} " ', end='')
 
-    system_name = '+'.join(map(str, system[1].split()))
+    system_name = '+'.join(map(str, ('%2B'.join(map(str, system[1].split('+')))).split()))
 
     resp_inara = http.request("GET", f"https://inara.cz/starsystem/?search={system_name}", headers=headers)
     inara_page = resp_inara.data.decode('utf-8')
