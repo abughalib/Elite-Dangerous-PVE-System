@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>PVE Filter</title>
 </head>
 <body>
   <h2>Elite Dangerous Wing Massacre Mission</h2>
@@ -17,8 +16,8 @@
   
 <h3> Purpose of this Script</h3>
   <p>
-    This script would filter out systems in following states which
-    are not in None, Boom, Expansion states, Civil Unrest.
+    This script would filter out systems
+    are in any type of Conflict.
   
     *More states would be added later.
   </p>
@@ -30,7 +29,7 @@
     <li>While installing add Python to your path, it would ask you during installation, probably at the beginning</li>
     <li>Open Powershell or Command Prompt and copy & paste following
       
-    python -m pip install bs4 pandas
+    python -m pip install bs4 pandas lxml
 </li>
   </ul>
 </div>
