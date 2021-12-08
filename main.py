@@ -5,6 +5,8 @@ import re
 import csv
 import vars
 import copy
+from urllib import parse
+from time import sleep
 
 http = urllib3.PoolManager()
 
@@ -15,6 +17,28 @@ args = vars.all_args.parse_args()
 ref_system = args.ref
 ref_system_distance = args.dist
 source_per_target = 1
+
+print('''
+Command: python main.py --fed 2 --imp 1 --all 1 --ind 1 --ref "Sol" --res "haz" --dist 100
+fed: Minimum number of federation faction on that system.
+imp: Minimum number of imperial faction on that system.
+all: Minimum number of alliance faction on that system.
+ind: Minimum number of Imperial Faction on that system.
+ref: Reference system i.e From where you are planning to look for the systems.
+res: Resource Extraction site types.
+    "any": "Any site i.e rings, CNB, low, reg, high, haz",
+    "ring": "Ring Site",
+    "CNB": "Compressed Nav Beacon",
+    "low": "Resource Extraction Site [Low]",
+    "reg": "Resource Extraction Site [Medium]",
+    "high": "Resource Extraction Site [High]",
+    "haz": "Resource Extraction Site [Hazardous]"
+dist: Maximum distance from the Reference system.
+
+Ctrl + C to exit anytime during execution.
+''')
+
+sleep(1)
 
 sites = {
     "any": "Any site i.e rings, CNB, low, reg, high, haz",
@@ -39,19 +63,34 @@ print(
     '''
 )
 
+sleep(1)
+
+# If you're not happy with useragent you can change it.
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
 }
-ref_system = '%2B'.join(map(str, ref_system.split("+")))
-resp = http.request("GET",
-                    f"https://edtools.cc/pve?s={'+'.join(map(str, ref_system.split()))}&md={ref_system_distance}&sc=",
+resp = http.request("GET", f"https://edtools.cc/pve?s={parse.quote(ref_system)}&md={ref_system_distance}&sc=",
                     headers=headers)
+
+
 
 page = resp.data.decode('utf-8')
 
 soup = BeautifulSoup(page, features='lxml')
-table = soup.find("table")
-rows = table.find_all("tr")
+table = ""
+row = ""
+
+try:
+    table = soup.find("table")
+except:
+    print("Unknown Error Check System Name")
+    exit(0)
+
+try:
+    rows = table.find_all("tr")
+except:
+    print("No System Found")
+    exit(0)
 
 with open("system_list.csv", "wt+", newline="") as f:
     writer = csv.writer(f)
@@ -103,9 +142,7 @@ for (index, system) in enumerate(zip(filtered_result.index, filtered_result["Sou
 
     print(f'Checking for conflict in: "{system[1]} " ', end='')
 
-    system_name = '+'.join(map(str, ('%2B'.join(map(str, system[1].split('+')))).split()))
-
-    resp_inara = http.request("GET", f"https://inara.cz/starsystem/?search={system_name}", headers=headers)
+    resp_inara = http.request("GET", f"https://inara.cz/starsystem/?search={parse.quote(system[1])}", headers=headers)
     inara_page = resp_inara.data.decode('utf-8')
 
     bs = BeautifulSoup(inara_page, 'lxml')
